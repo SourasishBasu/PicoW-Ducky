@@ -1,0 +1,13 @@
+REM Very Simple rickroll on target device
+REM Functionality somewhat dependent on device internet connection, memory etc
+
+DELAY 5000
+GUI r
+DELAY 50
+STRING https://www.youtube.com/watch?v=dQw4w9WgXcQ
+ENTER
+DELAY 1000
+DELAY 1000
+DELAY 1000
+STRING f
+[/CODE]
