@@ -4,9 +4,9 @@ I recently came across [Hak5's Rubbber Ducky](https://github.com/hak5/usbrubberd
 The basic working of a "Rubber Ducky" boils down to when it is connected to the target device, it behaves as a USB HID such as a keyboard, mouse etc and can therefore execute keystrokes and clicks just like how a human would on a computer without raising any flags making it extremely efficient and stealthy.
 
 ## Table of contents 
-- [Configuring the RasPi Pico W](#Configuring-the-Raspberry-Pico-W-Ducky)
-- [Payloads](#Payloads)
-- [Decrypting](#Decrypting-Passwords)
+- [Configuring the Pico W](#configuring-the-raspberry-pico-w-ducky)
+- [Payloads](#payloads)
+- [Decrypting](#decrypting-passwords)
 
 ## Configuring the Raspberry Pico W Ducky
 
