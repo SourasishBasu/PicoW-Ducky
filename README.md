@@ -223,6 +223,7 @@ Some more interesting payloads
 - [Ducky KeyLogger](https://github.com/hak5/usbrubberducky-payloads/tree/master/payloads/library/credentials/DuckyLogger)
 - [Persistent ReverseShell Ducky](https://github.com/drapl0n/persistentReverseDucky/tree/main)
 - [Mimikatz](https://github.com/gentilkiwi/mimikatz/wiki/module-~-sekurlsa) is an extremely powerful tool used within some payloads which is capable of extracting Windows user login credentials, hashes, keys, pin codes, tickets from the memory of `LSASS` (Local Security Authority Subsystem Service).
+- The [P4wnP1](https://github.com/RoganDawes/P4wnP1) repository consists of several payloads/scripts for a USB attack platform based on Raspberry Pi Zero or Pi Zero W which may be modified to work with the Pico devices as well.
 
 # Decrypting Passwords
 
@@ -361,3 +362,23 @@ python decrypt_chrome_password.py
 ### Working
 
 Refer to this [Medium article](https://ohyicong.medium.com/how-to-hack-chrome-password-with-python-1bedc167be3d) from [ohyicong](https://github.com/ohyicong/decrypt-chrome-passwords) to understand how the decrypting process works.
+
+<h1><a href="https://hak5.org/pages/policy">Legal</a></h1>
+
+Payloads from this repository are provided for educational purposes only. Hak5 gear and similar devices are intended for authorized auditing and security analysis purposes only where permitted subject to local and international laws where applicable. Users are solely responsible for compliance with all laws of their locality. I, Hak5 LLC and affiliates claim no responsibility for unauthorized or unlawful use.
+
+USB Rubber Ducky and DuckyScript are the trademarks of Hak5 LLC. Copyright © 2010 Hak5 LLC. All rights reserved. No part of this work may be reproduced or transmitted in any form or by any means without prior written permission from the copyright owner.
+USB Rubber Ducky and DuckyScript are subject to the [Hak5 license agreement](https://hak5.org/license)
+DuckyScript is the intellectual property of Hak5 LLC for the sole benefit of Hak5 LLC and its licensees. To inquire about obtaining a license to use this material in your own project, contact us. Please report counterfeits and brand abuse to legal@hak5.org.
+This material is for education, authorized auditing and analysis purposes where permitted subject to local and international laws. Users are solely responsible for compliance. Hak5 LLC claims no responsibility for unauthorized or unlawful use.
+Hak5 LLC products and technology are only available to BIS recognized license exception ENC favorable treatment countries pursuant to US 15 CFR Supplement No 3 to Part 740.
+
+See also: 
+
+[Hak5 Software License Agreement](https://shop.hak5.org/pages/software-license-agreement)
+	
+[Terms of Service](https://shop.hak5.org/pages/terms-of-service)
+
+# Disclaimer
+<h3><b>As with any script, you are advised to proceed with caution.</h3></b>
+<h3><b>Generally, payloads may execute commands on your device. As such, it is possible for a payload to damage your device. Payloads from this repository are provided AS-IS without warranty. While Hak5 makes a best effort to review payloads, there are no guarantees as to their effectiveness.</h3></b>
